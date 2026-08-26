@@ -141,3 +141,12 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+### Sementi ###
+# Nuxt 3 (o template Node cobre .nuxt e .output, não estes)
+.nitro/
+.data/
+# Editores
+.vscode/
+.idea/
+*.iml
