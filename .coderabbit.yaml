@@ -1,0 +1,98 @@
+# https://docs.coderabbit.ai/reference/configuration
+language: "pt-BR"
+tone_instructions: "Responda sempre em português do Brasil. Seja direto: aponte o problema e o conserto. Sem elogios, sem resumir o óbvio. Projeto solo — você é o único revisor."
+early_access: false
+enable_free_tier: true
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  sequence_diagrams: true
+  collapse_walkthrough: false
+  suggested_labels: false
+  poem: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: true
+    # base_branches = branch de DESTINO do PR. main e a default e ja e revisada.
+    base_branches:
+      - "develop"
+
+  path_filters:
+    - "!**/node_modules/**"
+    - "!**/.nuxt/**"
+    - "!**/.output/**"
+    - "!**/.nitro/**"
+    - "!**/dist/**"
+    - "!**/.idea/**"
+    - "!**/.vscode/**"
+    - "!package-lock.json"
+
+  path_instructions:
+    - path: "**/*.{vue,ts,js}"
+      instructions: |
+        VOCÊ DEVE RESPONDER, GERAR RESUMOS E FAZER TODOS OS COMENTÁRIOS ESTRITAMENTE EM
+        PORTUGUÊS DO BRASIL (pt-BR). NÃO USE INGLÊS.
+
+        Atue como Tech Lead do Sementi, avaliando o código de forma rigorosa.
+
+        ## Padrões de código
+        - Funções e composables curtos: máximo 15 linhas. Excedeu, exija refatoração.
+        - Responsabilidade Única (SRP): um composable resolve um problema.
+        - Nomes de componentes, funções e variáveis descritivos e obrigatoriamente em PORTUGUÊS,
+          para casar com o domínio (Palavra, Curtida, Categoria, Nivel, metaDiaria).
+        - Proibido código duplicado. Exija comentário em trecho complexo (ex: Regex, gesto).
+        - Proibido `any` desnecessário em TypeScript.
+        - Chamada de API sem tratamento de erro e sem estado de carregamento: aponte.
+        - Regra de negócio não mora no componente. Extraia para composable ou store.
+
+        ## Mobile-first, não opcional
+        - Aponte layout que só funciona em tela larga.
+        - Aponte alvo de toque pequeno demais.
+        - Todo gesto (arrastar) precisa de alternativa por toque.
+
+        ## Acessibilidade
+        - Rótulo em todo controle interativo, foco visível, contraste suficiente.
+        - Aponte div com onClick onde deveria ser button.
+
+        ## Regras de domínio do Sementi
+        - A tela principal é um fluxo de cartões. Curtir e descurtir agem na palavra atual
+          SEM avançar. Só "próxima" avança, e depois disso a decisão é definitiva —
+          não existe recurtir. Aponte implementação que trate curtir como alternável
+          depois de avançar.
+        - Cada palavra é entregue a um usuário no máximo uma vez. Nunca há repetição.
+        - Bater a meta diária não interrompe o fluxo; é uma conquista, não um fim.
+        - Nível é escolha do usuário, nunca decisão do sistema.
+        - A sessão atravessa domínios (netlify.app para onrender.com). Aponte fetch que
+          assuma mesma origem ou que esqueça credentials.
+
+        ## Stack
+        Nuxt 4 (estrutura app/, não pages/ na raiz), Vue 3.5, TypeScript.
+        NÃO sugira API de Nuxt 2.
+
+    - path: ".github/workflows/**"
+      instructions: |
+        Responda em português do Brasil.
+        - Aponte action com versão de major desatualizada.
+        - Aponte segredo escrito literalmente em vez de vir de secrets.
+        - Este workflow só testa. Deploy é do Netlify — sinalize passo de deploy adicionado aqui.
+
+knowledge_base:
+  learnings:
+    scope: "auto"
+  linked_repositories:
+    - repository: CamposCodes/sementi-backend
+      instructions: |
+        API do Sementi: Spring Boot 4, Java 21, PostgreSQL no Neon, hospedada no Render.
+        É a fonte da verdade do modelo de domínio (Usuario, Categoria, Palavra,
+        UsuarioPalavra, Curtida, Assinatura) e das regras de negócio.
+        Use como contexto para julgar consumo de API: nome de campo, formato de resposta
+        e regra de sessão vêm de lá. Aponte divergência entre o que o frontend espera
+        e o que a API expõe.
+
+chat:
+  auto_reply: true
