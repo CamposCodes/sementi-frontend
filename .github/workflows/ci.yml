@@ -19,6 +19,14 @@ jobs:
       - run: npm ci
       - name: Lint
         run: npm run lint
+      # Passo proprio, e nao typescript.typeCheck no nuxt.config: la a
+      # checagem rodaria em todo build de desenvolvimento e deixaria o ciclo
+      # local lento sem necessidade.
+      #
+      # Depende de npm ci ter rodado: o nuxt typecheck usa os tipos gerados
+      # em .nuxt/, que nascem do postinstall (nuxt prepare).
+      - name: Verificacao de tipos
+        run: npm run typecheck
       - name: Testes
         run: npm test
       - name: Build
