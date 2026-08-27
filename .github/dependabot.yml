@@ -1,0 +1,24 @@
+# Atualizacao de dependencia semanal e AGRUPADA. Sem os grupos, um bump do
+# Nuxt vira uma duzia de PRs separadas por pacote transitivo, e o resultado
+# pratico e ninguem olhar nenhuma.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      nuxt:
+        patterns:
+          - "nuxt"
+          - "@nuxt/*"
+          - "vue"
+          - "vue-router"
+      demais:
+        patterns:
+          - "*"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
